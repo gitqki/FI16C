@@ -3,8 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-
+<h3>Ceasar Shift</h3>
+<input type="number" id="ceasar_add" value="2">
+<br/>
+<h3>Verschl&uuml;sseln</h3>
+<input type="text" id="input_code">
+Output: <span id="output_code"></span>
+<br/>
+<h3>Entschl&uuml;sseln</h3>
+<input type="text" id="input_decode">
+Output: <span id="output_decode"></span>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        var add = 2;
+        var encrypt = function () {
+            var val = $('#input_code').val();
+            if (add === '') {
+                return;
+            }
+
+            var output = '';
+            for (var i = 0; i < val.length; i++) {
+                var char = val[i];
+
+                var ascii = char.charCodeAt(0);
+                output += String.fromCharCode(ascii + add);
+            }
+
+            $('#output_code').html(output);
+        };
+        var decrypt = function () {
+            var val = $('#input_decode').val();
+            if (add === '') {
+                return;
+            }
+            var output = '';
+            for (var i = 0; i < val.length; i++) {
+                var char = val[i];
+
+                var ascii = char.charCodeAt(0);
+
+                output += String.fromCharCode(ascii - add);
+            }
+
+            $('#output_decode').html(output);
+        };
+
+        $('#input_code').on("input", encrypt);
+        $('#input_decode').on("input", decrypt);
+        $('#ceasar_add').on("input", function () {
+            add = parseInt($(this).val());
+            encrypt();
+            decrypt();
+        })
+    });
+</script>
