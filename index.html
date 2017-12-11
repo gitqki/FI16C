@@ -2,9 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ceasar Crypt</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body>
-
+<input type="text" placeholder="Text" id="input"/>
+<span id="output" style="display:block;padding-top:15px;">Test</span>
 </body>
+<script>
+    $(document).ready(function(){
+
+        var shift = function(input, amount) {
+            var output = '';
+            for(i=0; i<input.length;i++) {
+
+                var letter = input[i];
+                if (letter.match(/[a-z]/i)) {
+                    var a = input.charCodeAt(i);
+                    letter = String.fromCharCode(((a - 65 + amount)) + 65);
+                }
+                output += letter;
+            }
+            return output
+
+        }
+        $("#input").on("change keyup paste", function(){
+            $("#output").html(shift($("#input").val(), 2));
+        });
+    })
+
+</script>
 </html>
