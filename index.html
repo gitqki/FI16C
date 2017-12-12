@@ -7,59 +7,62 @@
 </head>
 <body>
 <h3>Ceasar Shift</h3>
-<input type="number" id="ceasar_add" value="2">
+<input type="number" id="ceasar_add" value="2" >
 <br/>
 <h3>Verschl&uuml;sseln</h3>
-<input type="text" id="input_code">
+<input type="text" id="input_code" data-method="encode">
 Output: <span id="output_code"></span>
 <br/>
 <h3>Entschl&uuml;sseln</h3>
-<input type="text" id="input_decode">
+<input type="text" id="input_decode" data-method="decode">
 Output: <span id="output_decode"></span>
 </body>
 </html>
 <script>
     $(document).ready(function () {
         var add = 2;
-        var encrypt = function () {
-            var val = $('#input_code').val();
-            if (add === '') {
+
+        var ceasar = function (event) {
+            var id = '#'+event.target.id;
+
+            var val = $(id).val();
+            if (add === '' || add < 0) {
                 return;
             }
+
+            var method = $(id).attr('data-method');
 
             var output = '';
             for (var i = 0; i < val.length; i++) {
                 var char = val[i];
 
                 var ascii = char.charCodeAt(0);
-                output += String.fromCharCode(ascii + add);
+                var encString;
+                if(char === ' '){
+                    encString = ' ';
+                } else {
+                    if(method === 'encode'){
+                        encString = String.fromCharCode(ascii + add);
+                    } else if(method === 'decode'){
+                        encString = String.fromCharCode(ascii - add);
+                    }
+                }
+                output += encString;
             }
 
-            $('#output_code').html(output);
-        };
-        var decrypt = function () {
-            var val = $('#input_decode').val();
-            if (add === '') {
-                return;
+            if(method === 'encode'){
+                $('#output_code').html(output);
+            } else if(method === 'decode'){
+                $('#output_decode').html(output);
             }
-            var output = '';
-            for (var i = 0; i < val.length; i++) {
-                var char = val[i];
-
-                var ascii = char.charCodeAt(0);
-
-                output += String.fromCharCode(ascii - add);
-            }
-
-            $('#output_decode').html(output);
         };
 
-        $('#input_code').on("input", encrypt);
-        $('#input_decode').on("input", decrypt);
+        $('#input_code').on("input", ceasar);
+        $('#input_decode').on("input", ceasar);
         $('#ceasar_add').on("input", function () {
             add = parseInt($(this).val());
-            encrypt();
-            decrypt();
+            $('#input_code').trigger("input");
+            $('#input_decode').trigger("input");
         })
     });
 </script>
