@@ -6,28 +6,54 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body>
-<input type="text" placeholder="Text" id="input"/>
-<span id="output" style="display:block;padding-top:15px;">Test</span>
+<p>Shift:</p>
+<input id="shift" placeholder="2"/>
+<p>Verschlüsseln:</p>
+<textarea type="text" placeholder="Text" id="input-crypt" rows="5" cols="40"></textarea>
+<label>Ergebnis:</label>
+<span id="output-crypt">Test</span>
+<br/>
+<p>Entschlüsseln:</p>
+<textarea type="text" placeholder="Text" id="input-decrypt"rows="5" cols="40"></textarea>
+<span>Ergebnis:</span>
+<span id="output-decrypt">Test</span>
 </body>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
+        var cryptHandler = function (input, shifter, direction) {
+            var output = '',
+                amount = shifter.replace('"', "") || 2;
 
-        var shift = function(input, amount) {
-            var output = '';
-            for(i=0; i<input.length;i++) {
+            for (i = 0; i < input.length; i++) {
 
                 var letter = input[i];
                 if (letter.match(/[a-z]/i)) {
-                    var a = input.charCodeAt(i);
-                    letter = String.fromCharCode(((a - 65 + amount)) + 65);
+
+                    var curPosition = input.charCodeAt(i);
+                    if (i === 26) {
+                        curPosition = input.charCodeAt(i);
+                    }
+                    if (direction === "revert") {
+                        letter = String.fromCharCode((curPosition - amount % 26));
+                    } else {
+                        letter = String.fromCharCode((curPosition + amount % 26));
+                    }
                 }
                 output += letter;
             }
-            return output
-
+            return output;
         }
-        $("#input").on("change keyup paste", function(){
-            $("#output").html(shift($("#input").val(), 2));
+        var crypt = function (input, shifter) {
+            $("#output-crypt").html(cryptHandler(input, shifter, "normal"));
+        };
+        var decrypt = function (input, shifter) {
+            $("#output-decrypt").html(cryptHandler(input, shifter, "revert"));
+        };
+        $("#input-crypt").on("change keyup paste", function () {
+            crypt($("#input-crypt").val(), $("#shift").val())
+        });
+        $("#input-decrypt").on("change keyup paste", function () {
+            decrypt($("#input-decrypt").val(), $("#shift").val())
         });
     })
 
