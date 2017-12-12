@@ -2,20 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ceasar Encrypt</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <style>
+        .ceasar {
+            border: solid 1px lightgray;
+            border-radius: 5px;
+            margin: 20px;
+            padding: 10px;
+            width: 50%;
+        }
+
+        .ceasar_decode {
+            padding: 20px;
+        }
+
+        .ceasar_encode {
+            padding: 20px;
+        }
+
+        .ceasar_head {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-<h3>Ceasar Shift</h3>
-<input type="number" id="ceasar_add" value="2">
-<br/>
-<h3>Verschl&uuml;sseln</h3>
-<input type="text" id="input_code" data-method="encode">
-Output: <span id="output_code"></span>
-<br/>
-<h3>Entschl&uuml;sseln</h3>
-<input type="text" id="input_decode" data-method="decode">
-Output: <span id="output_decode"></span>
+<div class="ceasar">
+    <div class="ceasar_add">
+        <h4 class="ceasar_head col s12">Ceasar Shift</h4>
+        <div class="input-field col s12">
+            <i class="material-icons prefix">add_box</i>
+            <input type="number" id="ceasar_add" value="2">
+            <label for="ceasar_add">Shift Number</label>
+        </div>
+    </div>
+    <br/>
+
+    <ul class="collapsible" data-collapsible="accordion">
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">lock_outline</i>
+                Ceasar Encode
+            </div>
+            <div class="collapsible-body">
+                <div class="ceasar_encode">
+                    <h6>Verschl&uuml;sseln</h6>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea class="materialize-textarea" id="input_code" data-method="encode"></textarea>
+                        <label for="input_code">Input</label>
+                    </div>
+                    <br/>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">lock_outline</i>
+                        <textarea class="materialize-textarea" id="output_code" data-method="encode" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">lock_open</i>
+                Ceasar Decode
+            </div>
+            <div class="collapsible-body">
+                <div class="ceasar_decode">
+                    <h6>Entschl&uuml;sseln</h6>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea class="materialize-textarea" id="input_decode" data-method="decode"></textarea>
+                        <label for="input_code">Input</label>
+                    </div>
+                    <br/>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">lock_open</i>
+                        <textarea class="materialize-textarea" id="output_decode" data-method="decode" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
 </body>
 </html>
 <script>
@@ -56,9 +127,9 @@ Output: <span id="output_decode"></span>
             }
 
             if (method === 'encode') {
-                $('#output_code').html(output);
+                $('#output_code').val(output);
             } else if (method === 'decode') {
-                $('#output_decode').html(output);
+                $('#output_decode').val(output);
             }
         };
         var getNewAscii = function (ascii, type) {
@@ -71,7 +142,7 @@ Output: <span id="output_decode"></span>
                     return ascii + 64;
                 }
             } else if (type === 'decode') {
-                if(ascii > 90 && ascii < 97){
+                if (ascii > 90 && ascii < 97) {
                     ascii = ascii - 97;
                     return ascii + 123;
                 } else if (ascii < 65) {
